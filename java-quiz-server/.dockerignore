@@ -1,0 +1,6 @@
+src/businesslogic/*.class
+src/dataaccess/*.class
+src/domain/*.class
+src/META-INF/
+src/org/
+src/TestClient.java
