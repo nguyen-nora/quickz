@@ -1,31 +1,27 @@
 package vn.doitsolutions.quickz.pages.games.viewmodel
 
-import android.os.Parcel
-import android.os.Parcelable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import vn.doitsolutions.quickz.model.FakeQuestions
-import vn.doitsolutions.quickz.model.Question
-import vn.doitsolutions.quickz.model.Questions
-import javax.inject.Inject
-import androidx.lifecycle.*
+import vn.doitsolutions.quickz.model.ExamData
+import vn.doitsolutions.quickz.model.ExamQuestion
 
 
-class GameViewModel(var questions: Questions) : ViewModel() {
-//    var questions: Questions = FakeQuestions().generate().getQuestions()
-    private var currentQuestion: Question = questions.data[0]
+class GameViewModel(var examData: ExamData?) : ViewModel() {
+
+    private var currentQuestion: ExamQuestion? = null
     var currentQuestionIndex: Int = 0
-    var duration = questions.duration
-    var total = questions.data.size
+    var duration = 600
+    var total = 0
 
     var currentScore: Int = 0
     var isFinished: Boolean = false
 
-    fun getCurrentQuestion(): Question {
-        currentQuestion = questions.data[currentQuestionIndex]
+    init {
+        total = examData?.list?.size!!
+        currentQuestion = examData?.list!![currentQuestionIndex]
+    }
+
+    fun getCurrentQuestion(): ExamQuestion? {
+        currentQuestion = examData?.list!![currentQuestionIndex]
         return currentQuestion
     }
 
@@ -34,8 +30,9 @@ class GameViewModel(var questions: Questions) : ViewModel() {
         if (currentQuestionIndex == total - 1) {
             isFinished = true
         } else {
-            questions.data[currentQuestionIndex].userAnswer = an
-            if(an == questions.data[currentQuestionIndex].correctAnswer){
+            examData?.list!![currentQuestionIndex].userrep = an
+            examData?.list!![currentQuestionIndex].correct = an == examData?.list!![currentQuestionIndex].question?.correctAnswer
+            if(an == examData?.list!![currentQuestionIndex].question?.correctAnswer ){
                 currentScore++
             }
             currentQuestionIndex++;

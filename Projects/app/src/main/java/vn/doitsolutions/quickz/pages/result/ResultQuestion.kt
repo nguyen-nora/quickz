@@ -2,13 +2,10 @@ package vn.doitsolutions.quickz.pages.result
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,14 +14,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -33,23 +28,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import vn.doitsolutions.quickz.model.Question
-import vn.doitsolutions.quickz.model.Questions
+import vn.doitsolutions.quickz.model.ExamData
+import vn.doitsolutions.quickz.model.ExamQuestion
 import vn.doitsolutions.quickz.pages.auth.HomePage
 import vn.doitsolutions.quickz.pages.games.BackButton
+import vn.doitsolutions.quickz.pages.games.viewmodel.GameViewModel
 import vn.doitsolutions.quickz.ui.theme.QuickZTheme
 
 class ResultQuestion : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val i = intent
-        val questions: Questions? = i.getParcelableExtra<Parcelable>("final_list") as Questions?
-        var total = questions!!.data.size
+        val data = i.getParcelableExtra<ExamData>("examDataFinished") as ExamData?
+        val gameViewModel = GameViewModel(data)
+        var total = gameViewModel.total
+        var questionList = gameViewModel.examData!!.list
         setContent {
             QuickZTheme {
                 ResultQuestionPage(
                     onBackClick = { startActivity(Intent(this, HomePage::class.java)) },
-                    questions, total = total
+                    questionList, total = total
                 )
             }
         }
@@ -59,7 +57,7 @@ class ResultQuestion : ComponentActivity() {
 @Composable
 fun ResultQuestionPage(
     onBackClick: () -> Unit,
-    questions: Questions,
+    questionList: ArrayList<ExamQuestion>?,
     total: Int
 ) {
     Column(
@@ -87,8 +85,8 @@ fun ResultQuestionPage(
                         .fillMaxWidth()
                 )
             }
-            var list = ArrayList<Question>()
-            list = questions!!.data
+            var list = ArrayList<ExamQuestion>()
+            list = questionList!!
             var d = 1
             for (i in list) {
                 navQuestion(
@@ -106,7 +104,7 @@ fun ResultQuestionPage(
 fun navQuestion(
     questid: Int,
     total: Int,
-    question: Question
+    question: ExamQuestion
 ) {
     //QuestionCard
     Card(
@@ -132,7 +130,7 @@ fun navQuestion(
                     fontWeight = FontWeight(500),
                     color = Color(0xFFFE8253),
                 )
-                if (question.userAnswer != question.correctAnswer) {
+                if (question.correct!!) {
                     Text(
                         text = " - Wrong",
                         fontSize = 12.sp,
@@ -159,15 +157,15 @@ fun navQuestion(
                 color = Color(0xFF1B0330)
             )
             Text(
-                text = "${question.userAnswer}",
+                text = "${question.userrep}",
                 fontSize = 14.sp,
                 lineHeight = 18.2.sp,
                 fontWeight = FontWeight(500),
                 color = Color(0xFF1B0330),
             )
-            if (question.userAnswer != question.correctAnswer) {
+            if (question.correct!!) {
                 Text(
-                    text = "Correct Answer: ${question.correctAnswer}",
+                    text = "Correct Answer: ${question.question!!.correctAnswer}",
                     fontSize = 14.sp,
                     lineHeight = 18.2.sp,
                     fontWeight = FontWeight(500),

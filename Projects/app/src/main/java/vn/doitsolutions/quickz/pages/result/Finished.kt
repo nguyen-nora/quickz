@@ -31,10 +31,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import vn.doitsolutions.quickz.R
+import vn.doitsolutions.quickz.model.ExamData
+import vn.doitsolutions.quickz.model.ExamQuestion
 import vn.doitsolutions.quickz.model.Question
-import vn.doitsolutions.quickz.model.Questions
+//import vn.doitsolutions.quickz.model.QuestionList
 import vn.doitsolutions.quickz.pages.auth.HomePage
 import vn.doitsolutions.quickz.pages.games.viewmodel.GameViewModel
 import vn.doitsolutions.quickz.ui.theme.QuickZTheme
@@ -43,27 +44,28 @@ class Finished : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val i = intent
-        val questions: Questions? = i.getParcelableExtra<Parcelable>("question_list") as Questions?
-        var score = getScore(questions!!.data)
-        var total = questions.data.size
+        val data = i.getParcelableArrayListExtra<Question>("examDataFinished") as ExamData?
+        var gameViewModel = GameViewModel(data)
+        var score = getScore(gameViewModel.examData!!.list)
+        var total = gameViewModel.total
         setContent {
             QuickZTheme {
                 FinishedPage(score = score, total = total,
                     onBackClick = {startActivity(Intent(this, HomePage::class.java))},
                     onSubmitClick = {
+                        var examDataFinal = gameViewModel.examData
                     val i = Intent(this, ResultQuestion::class.java)
-                    i.putExtra("final_list", questions)
+                    i.putExtra("examDataFinal", examDataFinal)
                     startActivity(i)
                 })
             }
         }
     }
 }
-
-fun getScore(list: ArrayList<Question>): Int {
+fun getScore(list: ArrayList<ExamQuestion>): Int {
     var score = 0
     for (i in list) {
-        if (i.userAnswer == i.correctAnswer) {
+        if (i.correct!!) {
             score++
         }
     }

@@ -8,10 +8,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -45,10 +42,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import org.json.JSONArray
-import org.json.JSONObject
-import vn.doitsolutions.quickz.model.FakeQuestions
-import vn.doitsolutions.quickz.model.Question
-import vn.doitsolutions.quickz.model.Questions
+import vn.doitsolutions.quickz.model.ExamData
+import vn.doitsolutions.quickz.model.ExamQuestion
+//import vn.doitsolutions.quickz.model.FakeQuestions
 import vn.doitsolutions.quickz.network.ConnectTcp
 import vn.doitsolutions.quickz.pages.auth.HomePage
 import vn.doitsolutions.quickz.pages.games.component.ChooseAnswerPage
@@ -60,43 +56,47 @@ import vn.doitsolutions.quickz.ui.theme.QuickZTheme
 
 @Suppress("UNCHECKED_CAST")
 class TypeMultiChoice : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //test Socket
-        val jsonFiles = assets.list("json")
-        val questionList = ArrayList<Question>()
-        jsonFiles?.forEach { fileName ->
-            val jsonString = assets.open("json/$fileName").bufferedReader().use { it.readText() }
-            val jsonArray = JSONArray(jsonString)
-            for (i in 0 until jsonArray.length()) {
-                val jsonObject = jsonArray.getJSONObject(i)
-                var incorrect_answers = jsonObject.getJSONArray("incorrect_answers").toArrayList()
-                var correct_answer = jsonObject.getJSONArray("correct_answers").toArrayList()
-                var all_answer = incorrect_answers
-                all_answer.addAll(correct_answer)
-                val question = Question(
-                    question = jsonObject.getString("question"),
-                    correctAnswer = correct_answer.get(0),
-                    answers =  all_answer,
-                    userAnswer = null
-                )
-                questionList.add(question)
-            }
+//        //test Socket
+//        val jsonFiles = assets.list("json")
+//        val questionList = ArrayList<Question>()
+//        jsonFiles?.forEach { fileName ->
+//            val jsonString = assets.open("json/$fileName").bufferedReader().use { it.readText() }
+//            val jsonArray = JSONArray(jsonString)
+//            for (i in 0 until jsonArray.length()) {
+//                val jsonObject = jsonArray.getJSONObject(i)
+//                var incorrect_answers = jsonObject.getJSONArray("incorrect_answers").toArrayList()
+//                var correct_answer = jsonObject.getJSONArray("correct_answers").toArrayList()
+//                var all_answer = incorrect_answers
+//                all_answer.addAll(correct_answer)
+//                val question = Question(
+//                    question = jsonObject.getString("question"),
+//                    correctAnswer = correct_answer.get(0),
+//                    answers =  all_answer,
+//                    userAnswer = null
+//                )
+//                questionList.add(question)
+//            }
+//
+//        }
 
-        }
 
+        val i = intent
+        val data = i.getParcelableArrayListExtra<ExamData>("examData") as ExamData?
+        var gameViewModel = GameViewModel(data)
 
-
-        var gameViewModel = GameViewModel(Questions(questionList, 10))
         setContent {
             QuickZTheme {
                 GamesPage(
                     gameViewModel = gameViewModel,
                     onBackClick = {startActivity(Intent(this, HomePage::class.java))},
                     onSubmitClick = {
-                    val i = Intent(this, Finished::class.java)
-                    i.putExtra("question_list", it)
+                        var examDataFinished = ExamData(it!!.list, data?.user)
+                       val i = Intent(this, Finished::class.java)
+                    i.putExtra("examDataFinished", examDataFinished)
                     startActivity(i)
                 })
             }
@@ -120,7 +120,7 @@ fun JSONArray.toArrayList(): ArrayList<String> {
 fun GamesPage(
     gameViewModel: GameViewModel = viewModel(),
     onBackClick: () -> Unit,
-    onSubmitClick: (Questions) -> Unit,
+    onSubmitClick: (ExamData?) -> Unit,
 ) {
     var culIndex by remember { mutableIntStateOf(0) }
 
@@ -134,7 +134,7 @@ fun GamesPage(
         Spacer(modifier = Modifier.height(16.dp))
         //using for loop to next question
         QuestionCardPage(
-            question = gameViewModel.getCurrentQuestion().question!!,
+            question = gameViewModel.getCurrentQuestion()?.question?.question!!,
             questionNumber = culIndex + 1,
             totalQuestion = gameViewModel.total
         )
@@ -142,7 +142,7 @@ fun GamesPage(
         //using for loop to next question
 
         ChooseAnswerPage(
-            list = gameViewModel.getCurrentQuestion().answers!!,
+            list = gameViewModel.getCurrentQuestion()!!.question?.answers!!,
             onAnswerClick = {
                 gameViewModel.selectedAnswer(it)
                 if (culIndex == gameViewModel.total - 1) {
@@ -153,7 +153,7 @@ fun GamesPage(
             },
             isFinished = gameViewModel.isFinished,
             onSubmitClick = {
-                onSubmitClick(gameViewModel.questions)
+                onSubmitClick(gameViewModel.examData)
             }
         )
     }
@@ -260,7 +260,7 @@ fun PlayContent() {
 @Preview(showBackground = true)
 @Composable
 fun GamesPagePreview() {
-    val viewModel = GameViewModel(FakeQuestions().generate().getQuestions())
+//    val viewModel = GameViewModel(FakeQuestions().generate().getQuestions())
     QuickZTheme {
         //GamesPage(gameViewModel = viewModel, {})
     }

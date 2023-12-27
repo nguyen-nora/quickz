@@ -3,23 +3,24 @@ package vn.doitsolutions.quickz.model
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class Question(
-    @SerializedName("question")
+    @Json(name = "question")
     val question: String?,
-    @SerializedName("options")
+    @Json( name = "options")
     val answers: List<String>?,
-    @SerializedName("correct_answer")
+    @Json(name = "correct")
     val correctAnswer: String?,
-    @SerializedName("user_answer")
-    var userAnswer: String?
+    @Json(name = "_id")
+    var _id: String?
 
 ): Parcelable{
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.createStringArrayList(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
     ) {
     }
 
@@ -27,7 +28,7 @@ data class Question(
         parcel.writeString(question)
         parcel.writeStringList(answers)
         parcel.writeString(correctAnswer)
-        parcel.writeString(userAnswer)
+        parcel.writeString(_id)
     }
 
     override fun describeContents(): Int {
