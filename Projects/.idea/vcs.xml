@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/C50/Laravel-10-roles-and-permissions" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/C50/tracking" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dms" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/frappe_docker" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/gin-vue-admin" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/gin-vue-admin/server" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/gin-vue-admin/web" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rung-hoa" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/your_track" vcs="Git" />
+  </component>
+</project>

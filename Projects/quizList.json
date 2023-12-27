@@ -1,0 +1,102 @@
+[
+  {
+    "question": "What is the meaning of 'ephemeral'?",
+    "options": [
+      "Long-lasting",
+      "Temporary",
+      "Permanent",
+      "Infinite"
+    ],
+    "correct_answer": "Temporary"
+  },
+  {
+    "question": "Select the correct meaning of 'ambivalent':",
+    "options": [
+      "Confident",
+      "Indecisive",
+      "Courageous",
+      "Determined"
+    ],
+    "correct_answer": "Indecisive"
+  },
+  {
+    "question": "What does 'eloquent' mean?",
+    "options": [
+      "Articulate",
+      "Rude",
+      "Irritable",
+      "Silent"
+    ],
+    "correct_answer": "Articulate"
+  },
+  {
+    "question": "Choose the appropriate meaning for 'pristine':",
+    "options": [
+      "Dirty",
+      "Tarnished",
+      "Untouched",
+      "Damaged"
+    ],
+    "correct_answer": "Untouched"
+  },
+  {
+    "question": "What is the meaning of 'magnanimous'?",
+    "options": [
+      "Selfish",
+      "Vindictive",
+      "Generous",
+      "Greedy"
+    ],
+    "correct_answer": "Generous"
+  },
+  {
+    "question": "What is the meaning of 'eloquent'?",
+    "options": [
+      "Inarticulate",
+      "Meaningless",
+      "Verbose",
+      "Expressive"
+    ],
+    "correct_answer": "Expressive"
+  },
+  {
+    "question": "Choose the correct meaning of 'alacrity':",
+    "options": [
+      "Lethargy",
+      "Promptness",
+      "Reluctance",
+      "Boredom"
+    ],
+    "correct_answer": "Promptness"
+  },
+  {
+    "question": "What does 'zealous' mean?",
+    "options": [
+      "Apathetic",
+      "Indifferent",
+      "Enthusiastic",
+      "Cautious"
+    ],
+    "correct_answer": "Enthusiastic"
+  },
+  {
+    "question": "Select the appropriate meaning for 'furtive':",
+    "options": [
+      "Honest",
+      "Genuine",
+      "Covert",
+      "Obvious"
+    ],
+    "correct_answer": "Covert"
+  },
+  {
+    "question": "What is the meaning of 'ubiquitous'?",
+    "options": [
+      "Scarce",
+      "Rare",
+      "Widespread",
+      "Limited"
+    ],
+    "correct_answer": "Widespread"
+  }
+]

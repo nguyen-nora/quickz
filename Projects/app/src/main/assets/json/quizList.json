@@ -1,0 +1,46 @@
+[
+  {
+    "question": "What is the capital of France?",
+    "incorrect_answers": [
+      "London",
+      "Berlin",
+      "Madrid"
+    ],
+    "correct_answers": [
+      "Paris"
+    ]
+  },
+  {
+    "question": "What is the tallest mountain in the world?",
+    "incorrect_answers": [
+      "K2",
+      "Kilimanjaro",
+      "Makalu"
+    ],
+    "correct_answers": [
+      "Mount Everest"
+    ]
+  },
+  {
+    "question": "What is the largest country in the world by area?",
+    "incorrect_answers": [
+      "Canada",
+      "China",
+      "United States"
+    ],
+    "correct_answers": [
+      "Russia"
+    ]
+  },
+  {
+    "question": "What is the most populous country in the world?",
+    "incorrect_answers": [
+      "India",
+      "United States",
+      "Indonesia"
+    ],
+    "correct_answers": [
+      "China"
+    ]
+  }
+]
