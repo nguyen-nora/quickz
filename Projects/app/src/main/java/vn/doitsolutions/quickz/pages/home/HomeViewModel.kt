@@ -12,6 +12,7 @@ import vn.doitsolutions.quickz.network.ExamApi
 
 class HomeViewModel : ViewModel(){
     var status  = mutableStateOf<String>("init")
+    var message: String = ""
     var examResponseObject : ExamResponseObject? = null
 
     init {
@@ -22,11 +23,11 @@ class HomeViewModel : ViewModel(){
      viewModelScope.launch {
          status.value = "loading"
          requestCreateExam(username).collect{response -> status.value = response}
-         if(status.value == "success"){
-             status.value = "success"
-         }else{
-             status.value = "fail"
-         }
+            if(status.value == "success"){
+                message = "Tạo đề thành công"
+            }else{
+                message = "Tạo đề thất bại"
+            }
      }
     }
 
@@ -44,7 +45,6 @@ class HomeViewModel : ViewModel(){
             }else{
                 emit("fail")
             }
-            emit("success")
         } catch (e: Exception) {
             println("CERA: " + e.message)
             emit("fail")

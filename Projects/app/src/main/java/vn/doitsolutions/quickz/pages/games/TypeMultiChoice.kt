@@ -85,7 +85,7 @@ class TypeMultiChoice : ComponentActivity() {
 
 
         val i = intent
-        val data = i.getParcelableArrayListExtra<ExamData>("examData") as ExamData?
+        val data = i.getParcelableExtra<ExamData>("examData") as ExamData?
         var gameViewModel = GameViewModel(data)
 
         setContent {

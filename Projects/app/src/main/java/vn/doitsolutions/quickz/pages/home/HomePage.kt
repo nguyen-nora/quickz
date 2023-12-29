@@ -48,6 +48,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -85,7 +87,7 @@ class HomePage : ComponentActivity() {
 @Composable
 fun HomeView(
     user: User?,
-    homeViewModel: HomeViewModel = HomeViewModel(),
+    homeViewModel: HomeViewModel = viewModel(),
     onPlayGames: (examData: ExamData?) -> Unit) {
 
     var loadingStatus by homeViewModel.status
@@ -94,21 +96,25 @@ fun HomeView(
 
     when(val status  = loadingStatus){
         "loading" -> {
-            message = "Đang tạo câu hỏi"
+                Toast.makeText(context,
+                    message,
+                    Toast.LENGTH_LONG).show()
         }
         "success" -> {
-            message = "Tạo thành công"
+            onPlayGames(homeViewModel.examResponseObject?.data)
         }
         "fail" -> {
-            message = "Tạo câu hỏi tất bại"
+
+                Toast.makeText(context,
+                    message,
+                    Toast.LENGTH_LONG).show()
+
         }
     }
 
-    if (loadingStatus != "init") {
-        Toast.makeText(context,
-            message,
-            Toast.LENGTH_LONG).show()
-    }
+
+
+
 
     Column(
         modifier = Modifier
@@ -209,8 +215,11 @@ fun HomeView(
                 }
                 PlayButton(onClick = {
                     homeViewModel.createExam(user!!.username!!)
-                    onPlayGames(homeViewModel.examResponseObject?.data)
+//                    loadingStatus = homeViewModel.status.value
+
                 })
+
+
             }
             //SliderMinimal()
         }

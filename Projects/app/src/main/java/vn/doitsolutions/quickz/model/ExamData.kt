@@ -2,7 +2,9 @@ package vn.doitsolutions.quickz.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.squareup.moshi.FromJson
 import com.squareup.moshi.Json
+import com.squareup.moshi.ToJson
 
 
 data class ExamData(
@@ -37,4 +39,13 @@ data class ExamData(
     }
 
 
+}
+
+
+class ExamQuestionArrayListMoshiAdapter {
+    @ToJson
+    fun arrayListToJson(list: ArrayList<ExamQuestion>): List<ExamQuestion> = list
+
+    @FromJson
+    fun arrayListFromJson(list: List<ExamQuestion>): ArrayList<ExamQuestion> = ArrayList(list)
 }
