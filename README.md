@@ -1,5 +1,5 @@
 # Research App Android & Java
-## Quickz App using JetpackCompose + IOSocket Java & API Google Sheet using AppScript
+## QuickZ App using JetpackCompose + IOSocket Java & API Google Sheet using AppScript
 ### Author
 - App: Nguyễn Huy Hiếu (Da Lat University)
 - Server: Tôn Thất Khắc Trịnh (Da Lat University)
