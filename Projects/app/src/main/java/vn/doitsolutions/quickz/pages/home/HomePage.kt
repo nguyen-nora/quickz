@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -33,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,11 +42,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -54,9 +59,11 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import vn.doitsolutions.quickz.R
 import vn.doitsolutions.quickz.R.drawable.*
+import vn.doitsolutions.quickz.model.ExamData
 import vn.doitsolutions.quickz.model.User
 import vn.doitsolutions.quickz.navigation.NavigationItem
 import vn.doitsolutions.quickz.pages.games.TypeMultiChoice
+import vn.doitsolutions.quickz.pages.home.HomeViewModel
 import vn.doitsolutions.quickz.ui.theme.QuickZTheme
 
 class HomePage : ComponentActivity() {
@@ -66,9 +73,12 @@ class HomePage : ComponentActivity() {
         var user = i.getParcelableExtra<Parcelable>("userObject") as User?
         setContent {
             QuickZTheme() {
-                HomeView(user = user) {
-                    startActivity(Intent(this, TypeMultiChoice()::class.java))
-                }
+                HomeView(user = user,
+                onPlayGames = {
+                    val i = Intent(this, TypeMultiChoice::class.java)
+                    i.putExtra("examData", it)
+                    startActivity(i)
+                })
             }
         }
     }
@@ -77,7 +87,35 @@ class HomePage : ComponentActivity() {
 @Composable
 fun HomeView(
     user: User?,
-    onPlayGames: () -> Unit) {
+    homeViewModel: HomeViewModel = viewModel(),
+    onPlayGames: (examData: ExamData?) -> Unit) {
+
+    var loadingStatus by homeViewModel.status
+    var message by remember {  mutableStateOf<String>("")  }
+    val context  = LocalContext.current
+
+    when(val status  = loadingStatus){
+        "loading" -> {
+                Toast.makeText(context,
+                    message,
+                    Toast.LENGTH_LONG).show()
+        }
+        "success" -> {
+            onPlayGames(homeViewModel.examResponseObject?.data)
+        }
+        "fail" -> {
+
+                Toast.makeText(context,
+                    message,
+                    Toast.LENGTH_LONG).show()
+
+        }
+    }
+
+
+
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -175,7 +213,13 @@ fun HomeView(
                         color = Color(0xFFFFFFFF),
                     )
                 }
-                PlayButton(onClick = onPlayGames)
+                PlayButton(onClick = {
+                    homeViewModel.createExam(user!!.username!!)
+//                    loadingStatus = homeViewModel.status.value
+
+                })
+
+
             }
             //SliderMinimal()
         }

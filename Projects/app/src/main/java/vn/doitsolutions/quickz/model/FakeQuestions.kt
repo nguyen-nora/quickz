@@ -1,5 +1,5 @@
 package vn.doitsolutions.quickz.model
-
+/*
 class FakeQuestions {
     private var questions = ArrayList<Question>()
 
@@ -33,13 +33,13 @@ class FakeQuestions {
         return this
     }
 
-    fun getQuestions(): Questions {
+    fun getQuestions(): QuestionList {
 
-        return Questions(
+        return QuestionList(
             data = this.questions,
             duration = 30
         )
     }
 
 
-}
+}*/
