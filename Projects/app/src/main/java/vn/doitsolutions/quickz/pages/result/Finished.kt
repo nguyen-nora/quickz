@@ -44,7 +44,7 @@ class Finished : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val i = intent
-        val data = i.getParcelableArrayListExtra<Question>("examDataFinished") as ExamData?
+        val data = i.getParcelableExtra<ExamData>("examDataFinished") as ExamData?
         var gameViewModel = GameViewModel(data)
         var score = getScore(gameViewModel.examData!!.list)
         var total = gameViewModel.total

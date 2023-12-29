@@ -43,7 +43,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import org.json.JSONArray
 import vn.doitsolutions.quickz.model.ExamData
-import vn.doitsolutions.quickz.model.ExamQuestion
 //import vn.doitsolutions.quickz.model.FakeQuestions
 import vn.doitsolutions.quickz.network.ConnectTcp
 import vn.doitsolutions.quickz.pages.auth.HomePage
@@ -113,6 +112,13 @@ fun JSONArray.toArrayList(): ArrayList<String> {
     return list
 }
 
+fun formatMilliseconds(milliseconds: Long): String {
+    val totalSeconds = milliseconds / 1000
+    val minutes = totalSeconds / 60
+    val seconds = totalSeconds % 60
+    return "$minutes:$seconds"
+}
+
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -153,6 +159,8 @@ fun GamesPage(
             },
             isFinished = gameViewModel.isFinished,
             onSubmitClick = {
+                //gameViewModel.viewModelScope
+//                gameViewModel.submit()
                 onSubmitClick(gameViewModel.examData)
             }
         )
@@ -188,17 +196,17 @@ fun timerCard(duration: Int, onBackClick: () -> Unit) {
             horizontalArrangement = Arrangement.Start
         ) {
             Text(
-                text = "05:42",
+                text = "00:00",
                 fontSize = 12.sp,
                 fontWeight = FontWeight(400),
                 textAlign = TextAlign.Start
             )
-            ProgressBar()
+            ProgressBar(duration.toLong())
             Text(
                 modifier = Modifier
                     .padding(start = 10.dp)
                     .align(alignment = Alignment.CenterVertically),
-                text = "10:00",
+                text = "${formatMilliseconds(duration.toLong())}",
                 fontSize = 12.sp,
                 fontWeight = FontWeight(400),
                 textAlign = TextAlign.End
@@ -223,8 +231,9 @@ fun BackButton(onClick: () -> Unit) {
 }
 
 @Composable
-fun ProgressBar() {
+fun ProgressBar(time : Long) {
     Column() {
+        //timer with time
         LinearProgressIndicator(
             modifier = Modifier
                 .padding(start = 12.dp, top = 2.dp, bottom = 12.dp)
