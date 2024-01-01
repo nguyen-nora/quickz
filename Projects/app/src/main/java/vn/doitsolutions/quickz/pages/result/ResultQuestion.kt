@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.ArrayRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -59,7 +60,7 @@ class ResultQuestion : ComponentActivity() {
 @Composable
 fun ResultQuestionPage(
     onBackClick: () -> Unit,
-    questionList: ArrayList<ExamQuestion>?,
+    questionList: ArrayList<ExamQuestion>,
     total: Int
 ) {
     Column(
@@ -88,10 +89,10 @@ fun ResultQuestionPage(
                         .fillMaxWidth()
                 )
             }
-            var list = ArrayList<ExamQuestion>()
-            list = questionList!!
+            //var list = ArrayList<ExamQuestion>()
+            //list = questionList!!
             var d = 1
-            for (i in list) {
+            for (i in questionList) {
                 navQuestion(
                     questid = d++,
                     total = total,
@@ -133,7 +134,7 @@ fun navQuestion(
                     fontWeight = FontWeight(500),
                     color = Color(0xFFFE8253),
                 )
-                if (question.correct!!) {
+                if (question.correct!! == false) {
                     Text(
                         text = " - Wrong",
                         fontSize = 12.sp,
@@ -154,7 +155,7 @@ fun navQuestion(
             Text(
                 modifier = Modifier
                     .padding(bottom = 10.dp),
-                text = "${question.question}",
+                text = "${question.question!!.question}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight(600),
                 color = Color(0xFF1B0330)
@@ -166,7 +167,7 @@ fun navQuestion(
                 fontWeight = FontWeight(500),
                 color = Color(0xFF1B0330),
             )
-            if (question.correct!!) {
+            if (question.correct == false) {
                 Text(
                     text = "Correct Answer: ${question.question!!.correctAnswer}",
                     fontSize = 14.sp,

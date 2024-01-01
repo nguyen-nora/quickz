@@ -48,9 +48,10 @@ class Finished : ComponentActivity() {
         var gameViewModel = GameViewModel(data)
         var score = getScore(gameViewModel.examData!!.list)
         var total = gameViewModel.total
+        var skip = getResultSkip(gameViewModel.examData!!.list)
         setContent {
             QuickZTheme {
-                FinishedPage(score = score, total = total,
+                FinishedPage(score = score, total = total, skip = skip,
                     onBackClick = {startActivity(Intent(this, HomePage::class.java))},
                     onSubmitClick = {
                         var examDataFinal = gameViewModel.examData
@@ -72,11 +73,22 @@ fun getScore(list: ArrayList<ExamQuestion>): Int {
     return score
 }
 
+fun getResultSkip(questionList : ArrayList<ExamQuestion>) : Int{
+    var d : Int = 0;
+    for (i in questionList){
+        if (i.userrep == null && i.correct == false) {
+            d++
+        }
+    }
+    return d
+}
+
 
 @Composable
 fun FinishedPage(
     score: Int,
     total: Int,
+    skip: Int,
     onBackClick: () -> Unit,
     onSubmitClick: () -> Unit,
 ) {
@@ -127,8 +139,8 @@ fun FinishedPage(
                     .padding(top = 20.dp, bottom = 20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                ComponentResult()
-                ComponentResult()
+                ComponentResult(d = score, "Correct Answer")
+                ComponentResult(d = total - score, "Incorrect Answer" )
             }
             Row(
                 modifier = Modifier
@@ -137,8 +149,8 @@ fun FinishedPage(
                     .padding(top = 20.dp, bottom = 20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                ComponentResult()
-                ComponentResult()
+                ComponentResult(d = skip,"Skipped questions")
+                ComponentResult(d = total, "Completion questions")
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
@@ -160,7 +172,7 @@ fun CheckAnswerButton(onClick: () -> Unit) {
 }
 
 @Composable
-fun ComponentResult(int: Int = 0) {
+fun ComponentResult(d: Int, text : String) {
     Card(
         modifier = Modifier
             .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 12.dp))
@@ -179,14 +191,14 @@ fun ComponentResult(int: Int = 0) {
                     .size(22.dp)
             )
             Text(
-                text = "14 Question",
+                text = "${d} questions",
                 fontSize = 16.sp,
                 lineHeight = 18.2.sp,
                 fontWeight = FontWeight(600),
                 color = Color(0xFF000000),
             )
             Text(
-                text = "Correct Answer",
+                text = "${text}",
                 fontSize = 14.sp,
                 lineHeight = 18.2.sp,
                 fontWeight = FontWeight(400),
