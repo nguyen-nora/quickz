@@ -65,7 +65,7 @@ class Finished : ComponentActivity() {
 fun getScore(list: ArrayList<ExamQuestion>): Int {
     var score = 0
     for (i in list) {
-        if (i.correct!!) {
+        if (i.correct == true) {
             score++
         }
     }

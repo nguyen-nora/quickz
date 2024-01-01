@@ -84,13 +84,13 @@ fun LoginView(
 
     when(val status = loginStatus){
         "loading" -> {
-            loginMessage = "Đang đăng nhập"
+            loginMessage = "Process Login"
         }
         "success" -> {
-            loginMessage = "Đăng nhập thành công"
+            loginMessage = "Login Success"
         }
         "fail" -> {
-            loginMessage = "Đăng nhập thất bại"
+            loginMessage = "Login Failed"
         }
     }
 

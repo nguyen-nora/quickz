@@ -39,7 +39,7 @@ class LoginViewModel : ViewModel() {
             }else{
                 emit("fail")
             }
-            emit("success")
+            //emit("success")
         } catch (e: Exception) {
             println("CERA: " + e.message)
             emit("fail")

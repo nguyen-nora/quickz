@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,7 +41,7 @@ class ResultQuestion : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val i = intent
-        val data = i.getParcelableExtra<ExamData>("examDataFinished") as ExamData?
+        val data = i.getParcelableExtra<ExamData>("examDataFinal") as ExamData?
         val gameViewModel = GameViewModel(data)
         var total = gameViewModel.total
         var questionList = gameViewModel.examData!!.list
@@ -64,6 +66,7 @@ fun ResultQuestionPage(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color(0xFFF5F5F5))
+            .verticalScroll(rememberScrollState())
     ) {
         Card(
             modifier = Modifier
